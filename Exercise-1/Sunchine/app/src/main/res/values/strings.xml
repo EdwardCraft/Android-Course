@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Sunchine</string>
     <string name="action_settings">Settings</string>
+
+    <!--  Menu label to fetch  updated weather info -->
+    <string name="action_refresh" translatable="false">Refresh</string>
+
+
 </resources>
