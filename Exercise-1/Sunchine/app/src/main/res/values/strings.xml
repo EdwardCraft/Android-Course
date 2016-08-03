@@ -8,4 +8,36 @@
     <string name="hello_world"></string>
     <string name="title_activity_daily">DailyActivity</string>
     <string name="title_activity_sttings">Settings</string>
+
+
+    <string name="action_map">Map Location</string>
+    <string name="action_share">Share</string>
+
+    <!-- label for the location preference [CHAR LIMIT = NONE] -->
+    <string name="pref_location_label" translatable="false">Location</string>
+
+    <!-- Key name for storing location in SharedPreferences[CHAR LIMIT = NONE] -->
+    <string name="pref_location_key" translatable="false">location</string>
+
+    <!-- Default postal code for location preference [CHAR LIMIT = NONE] -->
+    <string name="pref_location_default" translatable="false">22000</string>
+
+    <!-- label for the Temperature units preference [char limit = none] -->
+    <string name="pref_Temperature_label" translatable="false">Temperature unit</string>
+
+    <!-- label for storing the Temperature in sharePreferences[char limit = none] -->
+    <string name="pref_Temperature_key" translatable="false">Temperature</string>
+
+    <!-- Default Temperatures unit[char limit = none] -->
+    <string name="pref_Temperature_default" translatable="false">metric</string>
+
+
+    <string name="pref_units_label_metric" translatable="false">Metric</string>
+    <string name="pref_units_label_imperial" translatable="false">Imperial</string>
+
+
+    <string name="pref_units_metric" translatable="false">metric</string>
+    <string name="pref_units_imperial" translatable="false">imperial</string>
+
+
 </resources>
