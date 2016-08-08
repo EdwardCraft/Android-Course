@@ -17,9 +17,13 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private final String FORECAST_FRAGMENT_TAG = "FFTAG";
+    private String mLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mLocation = Utility.getPreferredLocation(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -67,11 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void openPreferredLocationInMap(){
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(this);
-        String location =  sharedPreferences.getString(
-                getString(R.string.pref_location_key),
-                getString(R.string.pref_location_default));
+
+        String location = Utility.getPreferredLocation(this);
 
         //Using the URI scheme for showing a location found on a map.
         //This super-handy intent can is detailed int he "Common Intent's page"
@@ -89,10 +90,26 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed!");
         }
+    }
 
 
-
+    @Override
+    protected void onResume(){
+        super.onResume();
+        String location = Utility.getPreferredLocation(this);
+        //update the location in our second  pane using the fragment manager
+        if(location != null && !location.equals(mLocation)){
+            ForeCastFragment ff = (ForeCastFragment)getSupportFragmentManager().findFragmentByTag(FORECAST_FRAGMENT_TAG);
+            if(null != ff){
+                ff.onLocationChanged();
+            }
+            mLocation = location;
+        }
 
 
     }
+
+
+
+
 }
