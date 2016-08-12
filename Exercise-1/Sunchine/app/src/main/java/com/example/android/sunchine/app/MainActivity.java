@@ -15,28 +15,54 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.android.sunchine.app.sync.SunshineSyncAdapter;
+
+public class MainActivity extends AppCompatActivity{
+
     private final String LOG_TAG = MainActivity.class.getSimpleName();
-    private final String FORECAST_FRAGMENT_TAG = "FFTAG";
-    private String mLocation;
+    private final String DETAILFRAGMENT_TAG  = "DFTAG";
+
+
+    private boolean mTwoPane;
+    private String  mLocation;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mLocation = Utility.getPreferredLocation(this);
         super.onCreate(savedInstanceState);
+        mLocation = Utility.getPreferredLocation(this);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);*/
+
+
+        if(findViewById(R.id.weather_detail_container) != null){
+            //The detail container will be present only in the large-screen layouts
+            //(res/layout-sw600dp). If this view is present, then the activity should be
+            //in two-pane mode.
+            mTwoPane = true;
+
+            // In two pane mode,show the detail view in this activity by
+            //adding or replacing the fragment using a fragment manager
+            if(savedInstanceState == null){
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.weather_detail_container, new DailyActivityFragment(), DETAILFRAGMENT_TAG)
+                        .commit();
+
             }
-        });*/
+        }else{
+            mTwoPane = false;
+            getSupportActionBar().setElevation(0);
+        }
+
+        ForeCastFragment foreCastFragment = ((ForeCastFragment)getSupportFragmentManager()
+                 .findFragmentById(R.id.fragment_forecast));
+
+
+        foreCastFragment.setUseTodayLayout(!mTwoPane);
+        SunshineSyncAdapter.initializeSyncAdapter(this);
+
     }
 
     @Override
@@ -60,37 +86,10 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-
-        if(id == R.id.action_map){
-            openPreferredLocationInMap();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
 
-    private void openPreferredLocationInMap(){
-
-        String location = Utility.getPreferredLocation(this);
-
-        //Using the URI scheme for showing a location found on a map.
-        //This super-handy intent can is detailed int he "Common Intent's page"
-        //for android developer site :
-        // http://developer.android.com/guide/components/intents-common.html#Maps
-
-        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
-                .appendQueryParameter("q", location)
-                .build();
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(geoLocation);
-
-        if(intent.resolveActivity(getPackageManager()) != null){
-            startActivity(intent);
-        }else{
-            Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed!");
-        }
-    }
 
 
     @Override
@@ -99,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         String location = Utility.getPreferredLocation(this);
         //update the location in our second  pane using the fragment manager
         if(location != null && !location.equals(mLocation)){
-            ForeCastFragment ff = (ForeCastFragment)getSupportFragmentManager().findFragmentByTag(FORECAST_FRAGMENT_TAG);
+            ForeCastFragment ff = (ForeCastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
             if(null != ff){
                 ff.onLocationChanged();
             }
@@ -107,9 +106,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
     }
-
-
 
 
 }

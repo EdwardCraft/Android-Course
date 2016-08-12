@@ -3,6 +3,12 @@
     package="com.example.android.sunchine.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Permissions required by the sync adapter -->
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+
+
 
     <application
         android:allowBackup="true"
@@ -13,7 +19,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/ForecastTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +30,8 @@
             android:name=".DailyActivity"
             android:label="@string/title_activity_daily"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/ForecastTheme"
+           >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.sunchine.app.MainActivity" />
@@ -34,16 +41,40 @@
             android:name=".SttingsActivity"
             android:label="@string/title_activity_sttings"
             android:parentActivityName=".MainActivity"
+            android:theme="@style/SettingsTheme"
             ></activity>
 
         <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="MainActivity"
+                android:value="com.example.android.sunchine.app.MainActivity"
                 />
         <provider
-            android:authorities="com.example.android.sunchine.app"
+            android:authorities="@string/content_authority"
             android:name=".data.WeatherProvider"
+            android:exported="false"
+            android:syncable="true"
         ></provider>
+
+        <!-- SyncAdapter's dummy authentication service -->
+        <service android:name=".sync.SunshineAuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <!-- The syncAdapter service-->
+        <service android:name=".sync.SunshineSyncService" android:exported="true">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
+
+
     </application>
 
 </manifest>

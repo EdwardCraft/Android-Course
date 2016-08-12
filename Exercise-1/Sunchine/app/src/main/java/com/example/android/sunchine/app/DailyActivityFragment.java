@@ -2,6 +2,7 @@ package com.example.android.sunchine.app;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -35,6 +36,7 @@ public class DailyActivityFragment extends Fragment implements LoaderCallbacks<C
 
     private ShareActionProvider mShareActionProvider;
     private String  mForecast;
+
 
     private static final int DETAIL_LOADER = 0;
     private ViewHolderDetail viewHolderDetail;
@@ -156,11 +158,16 @@ public class DailyActivityFragment extends Fragment implements LoaderCallbacks<C
         super.onActivityCreated(savedInstanceState);
     }
 
+
+
+
+
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.v(LOG_TAG, "In onCreateLoader");
         Intent intent = getActivity().getIntent();
-        if(intent == null){
+        if(intent == null || intent.getData() == null){
             return null;
         }
 
@@ -185,8 +192,10 @@ public class DailyActivityFragment extends Fragment implements LoaderCallbacks<C
             if(data != null && data.moveToFirst()){
                 //Read weather condition ID form cursor
                 int weatherID = data.getInt(COL_WEATHER_CONDITION_ID);
-                //use place holder Image
-                viewHolderDetail.mIconView.setImageResource(R.mipmap.ic_launcher);
+                //use weather image
+                viewHolderDetail.mIconView.setImageResource(
+                        Utility.getArtResourceForWeatherCondition(weatherID));
+
 
                 //Read date from cursor and update views for day of week and date
                 long date = data.getLong(COL_WEATHER_DATE);
@@ -199,15 +208,20 @@ public class DailyActivityFragment extends Fragment implements LoaderCallbacks<C
                 String description = data.getString(COL_WEATHER_DESC);
                 viewHolderDetail.mDescriptionView.setText(description);
 
+                // for accessibility, add a content description to the icon field
+                viewHolderDetail.mIconView.setContentDescription(description);
+
+
+
                 //Read high temperature from the cursor and update the view
                 boolean isMetric = Utility.isMetric(getActivity());
                 double high = data.getDouble(COL_WEATHER_MAX_TEMP);
-                String highString = Utility.formatTemperature(getActivity(), high, isMetric);
+                String highString = Utility.formatTemperature(getActivity(), high);
                 viewHolderDetail.mHighTempView.setText(highString);
 
                 //Read low temperature from cursor and update view
                 double low = data.getDouble(COL_WEATHER_MIN_TEMP);
-                String lowString = Utility.formatTemperature(getActivity(), low, isMetric);
+                String lowString = Utility.formatTemperature(getActivity(), low);
                 viewHolderDetail.mLowTempView.setText(lowString);
 
                 //Read humidity from cursor and update view
