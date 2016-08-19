@@ -33,9 +33,6 @@ public class MainActivity extends AppCompatActivity{
         mLocation = Utility.getPreferredLocation(this);
         setContentView(R.layout.activity_main);
 
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);*/
-
 
         if(findViewById(R.id.weather_detail_container) != null){
             //The detail container will be present only in the large-screen layouts

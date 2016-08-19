@@ -20,7 +20,7 @@
     <string name="pref_location_key" translatable="false">location</string>
 
     <!-- Default postal code for location preference [CHAR LIMIT = NONE] -->
-    <string name="pref_location_default" translatable="false">22000</string>
+    <string name="pref_location_default" translatable="false">MX,Tijuana</string>
 
     <!-- label for the Temperature units preference [char limit = none] -->
     <string name="pref_Temperature_label" translatable="false">Temperature unit</string>
@@ -80,6 +80,20 @@
     <string name="pref_enable_notifications_true">Enabled</string>
     <string name="pref_enable_notifications_false">Not Enabled</string>
     <string name="pref_enable_notifications_default" translatable="false">true</string>
+
+
+    <!--  Empty Weather Database  -->
+    <string name="empty_forecast_list">No Weather Information Available</string>
+    <string name="empty_forecast_list_no_network">No weather information available. The network is not available to fetch information</string>
+    <string name="empty_forecast_list_server_down">No weather information available. The server is not available right now</string>
+    <string name="empty_forecast_list_server_error">No weather information available. The server is not returning weather forecast</string>
+    <string name="empty_forecast_list_invalid_location">No weather information available. The location in setting is not recognized by the weather API</string>
+    <!--  Key name for storing location status in SharedPreferences  -->
+    <string name="pref_location_status_key" translatable="false">loc-status</string>
+
+    <!-- Strings use when displaying the state of the location  in settings -->
+    <string name="pref_location_error_description">Invalid Location (<xliff:g id="location_setting">%1$s</xliff:g>)"</string>
+    <string name="pref_location_unknown_description">Validating Location... (<xliff:g id="location_setting">%1$s</xliff:g>)"</string>
 
 
 

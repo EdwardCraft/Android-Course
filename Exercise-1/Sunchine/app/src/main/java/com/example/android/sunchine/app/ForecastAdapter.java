@@ -1,6 +1,7 @@
 package com.example.android.sunchine.app;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.ImageWriter;
 import android.text.Layout;
@@ -20,7 +21,7 @@ import org.w3c.dom.Text;
  * */
 
 
-public class ForecastAdapter extends CursorAdapter{
+public class ForecastAdapter extends CursorAdapter {
 
     private static final int VIEW_TYPE_COUNT = 2;
     private static final int VIEW_TYPE_TODAY = 0;
@@ -142,8 +143,6 @@ public class ForecastAdapter extends CursorAdapter{
     public int getViewTypeCount(){
         return VIEW_TYPE_COUNT;
     }
-
-
 
 
 }

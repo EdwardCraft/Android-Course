@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.IntDef;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.format.Time;
@@ -42,6 +43,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Vector;
@@ -68,6 +71,17 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final int INDEX_MAX_TEMP = 1;
     private static final int INDEX_MIN_TEMP = 2;
     private static final int INDEX_SHORT_DESC = 3;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_ONVALID,
+            LOCATION_STATUS_UNKOWN, LOCATION_STATUS_INVALID})
+    public @interface LocationStatus{}
+
+    public static final int LOCATION_STATUS_OK = 0;
+    public static final int LOCATION_STATUS_SERVER_DOWN = 1;
+    public static final int LOCATION_STATUS_SERVER_ONVALID = 2;
+    public static final int LOCATION_STATUS_UNKOWN = 3;
+    public static final int LOCATION_STATUS_INVALID = 4;
 
 
 
@@ -137,6 +151,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             }
             if (buffer.length() == 0) {
                 // Stream was empty.  No point in parsing.
+                setLocationStatus(getContext(), LOCATION_STATUS_SERVER_DOWN);
                 return;
             }
             forecastJsonStr = buffer.toString();
@@ -145,9 +160,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
+            setLocationStatus(getContext(), LOCATION_STATUS_SERVER_DOWN);
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
+            setLocationStatus(getContext(), LOCATION_STATUS_SERVER_ONVALID);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -208,8 +225,29 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         final String OWM_DESCRIPTION = "main";
         final String OWM_WEATHER_ID = "id";
 
+        final String OWM_MESSAGE_CODE = "cod";
+
+
+
         try {
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
+
+            //do we have an error?
+            if(forecastJson.has(OWM_MESSAGE_CODE)){
+                int errorCode = forecastJson.getInt(OWM_MESSAGE_CODE);
+                switch (errorCode){
+                    case HttpURLConnection.HTTP_OK:
+                        break;
+                    case HttpURLConnection.HTTP_NOT_FOUND:
+                        setLocationStatus(getContext(), LOCATION_STATUS_SERVER_ONVALID);
+                        return;
+                    default:
+                        setLocationStatus(getContext(), LOCATION_STATUS_SERVER_DOWN);
+                        return;
+                }
+            }
+
+
             JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
 
             JSONObject cityJson = forecastJson.getJSONObject(OWM_CITY);
@@ -301,7 +339,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
                 getContext().getContentResolver().bulkInsert(WeatherContract.WeatherEntry.CONTENT_URI, cvArray);
-
+                inserted++;
                 //delete old data so we don't build up an endless history
                 getContext().getContentResolver().delete(WeatherContract.WeatherEntry.CONTENT_URI,
                         WeatherContract.WeatherEntry.COLUMN_DATE + " <= ?" ,
@@ -310,11 +348,13 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 notifyWeather();
             }
 
-            Log.d(LOG_TAG, "Sync Complete. " + cVVector.size() + " Inserted");
+            Log.d(LOG_TAG, "Sync Complete. " + cVVector.size() + " Inserted" + inserted);
+            setLocationStatus(getContext(), LOCATION_STATUS_OK);
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
+            setLocationStatus(getContext(), LOCATION_STATUS_SERVER_ONVALID);
         }
     }
 
@@ -375,6 +415,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     public static void configurePeriodicSync(Context context,int syncInterval, int flexTime){
         Account account = getSyncAccount(context);
         String authority = context.getString(R.string.content_authority);
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
             //we can enable inexact timers in our periodic sync
             SyncRequest request = new SyncRequest.Builder()
@@ -446,6 +487,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
              * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
              * here.
              */
+
             onAccountCreated(newAccount, context);
         }
         return newAccount;
@@ -461,7 +503,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         /*
         * Without calling setSyncAutomatically, our periodic sync will not be enabled
         * */
-        ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), true);
+        ContentResolver.setSyncAutomatically(newAccount,
+                context.getString(R.string.content_authority), true);
 
         /*
         * Finally let's do a sync to get things started
@@ -471,6 +514,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     public static void initializeSyncAdapter(Context context){
+
         getSyncAccount(context);
     }
 
@@ -479,11 +523,14 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         Context context = getContext();
         //checking the last update and notify if it' the first of the day
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
         String displayNotificationsKey = context.getString(R.string.pref_enable_notifications_key);
+
         boolean displayNotifications = prefs.getBoolean(displayNotificationsKey,
                 Boolean.parseBoolean(context.getString(R.string.pref_enable_notifications_default)));
 
-        if (displayNotifications) {
+        if ( displayNotifications ) {
+
             String lastNotificationKey = context.getString(R.string.pref_last_notification);
             long lastSync = prefs.getLong(lastNotificationKey, 0);
 
@@ -549,13 +596,28 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                     //refreshing last sync
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putLong(lastNotificationKey, System.currentTimeMillis());
-                    editor.apply();
+                    editor.commit();
                 }
                 cursor.close();
             }
         }
     }
 
+
+    /*
+    *   Sets the location status into SharedPreferences. This function should not be called from
+    *   the UI thread because is uses  commit to write  to the shared preferences
+    *   @param c Context to get the PreferenceManager from.
+    *   @param locationStatus The IntDef value to set
+    * */
+
+    static private void setLocationStatus(Context c, @LocationStatus int locationStatus){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(c.getString(R.string.pref_location_status_key), locationStatus);
+        spe.commit();
+
+    }
 
 
 
