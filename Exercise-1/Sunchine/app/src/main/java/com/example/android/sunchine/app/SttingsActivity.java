@@ -36,6 +36,7 @@ public class SttingsActivity extends PreferenceActivity
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_Temperature_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_art_pack_key)));
     }
 
 
@@ -148,6 +149,9 @@ public class SttingsActivity extends PreferenceActivity
             SunshineSyncAdapter.syncImmediately(this);
         }else if(key.equals("units")){
             //units have changed . update list of entries accordingly
+            getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
+        }else if(key.equals(R.string.pref_art_pack_key)){
+            //art pack have changed. update list of weather entries accordingly
             getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
         }
     }

@@ -12,6 +12,7 @@ import com.example.android.sunchine.app.sync.SunshineSyncAdapter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by PEDRO on 07/08/2016.
@@ -246,6 +247,65 @@ public class Utility {
         return -1;
 
     }
+
+
+
+    /*
+    * Helper method to provide the art urls according to the weather condition id returned
+    * by the OpenWeatherMap call.
+    * */
+
+    public static String getArtUrlForWeatherCondition(Context context, int weatherId){
+
+        SharedPreferences prefs  = PreferenceManager.getDefaultSharedPreferences(context);
+        String formatArtUrl = prefs.getString(context.getString(R.string.pref_art_pack_key),
+                context.getString(R.string.pref_art_pack_sunshine));
+
+
+
+        // Based on the weather code data found at:
+        if (weatherId >= 200 && weatherId <= 232) {
+            return String.format(Locale.US, formatArtUrl, "storm");
+        } else if (weatherId >= 300 && weatherId <= 321) {
+            return String.format(Locale.US, formatArtUrl, "light_rain");
+        } else if (weatherId >= 500 && weatherId <= 504) {
+            return String.format(Locale.US, formatArtUrl, "rain");
+        } else if (weatherId == 511) {
+            return String.format(Locale.US, formatArtUrl, "snow");
+        } else if (weatherId >= 520 && weatherId <= 531) {
+            return String.format(Locale.US, formatArtUrl, "rain");
+        } else if (weatherId >= 600 && weatherId <= 622) {
+            return String.format(Locale.US, formatArtUrl, "snow");
+        } else if (weatherId >= 701 && weatherId <= 761) {
+            return String.format(Locale.US, formatArtUrl, "fog");
+        } else if (weatherId == 761 || weatherId == 781) {
+            return String.format(Locale.US, formatArtUrl, "storm");
+        } else if (weatherId == 800) {
+            return String.format(Locale.US, formatArtUrl, "clear");
+        } else if (weatherId == 801) {
+            return String.format(Locale.US, formatArtUrl, "light_clouds");
+        } else if (weatherId >= 802 && weatherId <= 804) {
+            return String.format(Locale.US, formatArtUrl, "clouds");
+        }
+        return null;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.sunchine.app.data.WeatherContract;
 import com.example.android.sunchine.app.data.WeatherContract.WeatherEntry;
 
@@ -193,8 +194,15 @@ public class DailyActivityFragment extends Fragment implements LoaderCallbacks<C
                 //Read weather condition ID form cursor
                 int weatherID = data.getInt(COL_WEATHER_CONDITION_ID);
                 //use weather image
-                viewHolderDetail.mIconView.setImageResource(
-                        Utility.getArtResourceForWeatherCondition(weatherID));
+                /*viewHolderDetail.mIconView.setImageResource(
+                        Utility.getArtResourceForWeatherCondition(weatherID));*/
+
+                //use Glide to get image
+                Glide.with(this)
+                        .load(Utility.getArtUrlForWeatherCondition(getActivity(), weatherID))
+                        .error(Utility.getArtResourceForWeatherCondition(weatherID))
+                        .crossFade()
+                        .into(viewHolderDetail.mIconView);
 
 
                 //Read date from cursor and update views for day of week and date

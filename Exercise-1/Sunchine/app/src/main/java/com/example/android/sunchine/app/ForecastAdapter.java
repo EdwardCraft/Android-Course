@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v4.widget.CursorAdapter;
+
+import com.bumptech.glide.Glide;
 import com.example.android.sunchine.app.data.WeatherContract;
 
 import org.w3c.dom.Text;
@@ -84,19 +86,34 @@ public class ForecastAdapter extends CursorAdapter {
 
         //Use placeholder image for now
         int viewType = getItemViewType(cursor.getPosition());
-
+        int weatherId = cursor.getInt(ForeCastFragment.COL_WEATHER_CONDITION_ID);
+        int fallBackIcon;
         switch (viewType) {
             case VIEW_TYPE_TODAY : {
-                viewHolder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(
-                        cursor.getInt(ForeCastFragment.COL_WEATHER_CONDITION_ID)));
+                /*viewHolder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(
+                        cursor.getInt(ForeCastFragment.COL_WEATHER_CONDITION_ID)));*/
+                //Glide
+                fallBackIcon = Utility.getArtResourceForWeatherCondition(weatherId);
                 break;
             }
-            case VIEW_TYPE_FUTURE_DAY: {
+            /*case VIEW_TYPE_FUTURE_DAY: {
                 viewHolder.iconView.setImageResource(Utility.getIconResourceForWeatherCondition(
                         cursor.getInt(ForeCastFragment.COL_WEATHER_CONDITION_ID)));
                 break;
+            }*/
+            default:{
+                fallBackIcon = Utility.getIconResourceForWeatherCondition(weatherId);
+                break;
             }
+
         }
+
+
+        Glide.with(mContext)
+                .load(Utility.getArtUrlForWeatherCondition(mContext,weatherId))
+                .error(fallBackIcon)
+                .crossFade()
+                .into(viewHolder.iconView);
 
 
         //Read date from cursor
