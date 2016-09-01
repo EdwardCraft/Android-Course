@@ -2,6 +2,7 @@ package com.example.android.sunchine.app;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.gesture.GestureOverlayView;
 import android.media.audiofx.BassBoost;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,15 +17,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.sunchine.app.sync.SunshineSyncAdapter;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 public class MainActivity extends AppCompatActivity{
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private final String DETAILFRAGMENT_TAG  = "DFTAG";
-
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     private boolean mTwoPane;
     private String  mLocation;
+
 
 
     @Override
@@ -59,6 +63,14 @@ public class MainActivity extends AppCompatActivity{
 
         foreCastFragment.setUseTodayLayout(!mTwoPane);
         SunshineSyncAdapter.initializeSyncAdapter(this);
+
+        if(!checkPlayServices()){
+            // this is where we could either prompt a user that they  should install
+            // the latest version of google play services, or add and error Snackbar
+            // that some feature's wont be available
+        }
+
+
 
     }
 
@@ -105,6 +117,40 @@ public class MainActivity extends AppCompatActivity{
 
 
     }
+
+
+
+    /*
+    * Check the device to make sure is has the Google Play Services APK.  if
+    * it doesn't, display a dialog that allows users to download the APK from
+    * the Google Play Store or enable it in the device's system settings.
+    *
+    * */
+
+
+    private boolean checkPlayServices(){
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if(resultCode != ConnectionResult.SUCCESS){
+            if(apiAvailability.isUserResolvableError(resultCode)){
+                apiAvailability.getErrorDialog(this, resultCode,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            }else{
+                Log.i(LOG_TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+
+        return  true;
+
+    }
+
+
+
+
+
+
 
 
 }
