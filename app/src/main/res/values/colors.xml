@@ -11,7 +11,15 @@
     <color name="black">#000000</color>
 
 
-    <color name="sunshine_light_red">#F79797</color>
+    <!-- <color name="sunshine_light_red">#F79797</color>
     <color name="sunshine_red">#F75B5B</color>
-    <color name="sunshine_dark_red">#C40C0C</color>
+    <color name="sunshine_dark_red">#C40C0C</color>-->
+
+    <!-- using the light red material palette  -->
+    <color name="primary">#F44336</color>     <!-- 500 -->
+    <color name="primary_dark">#D32F2F</color>  <!-- 700 -->
+    <color name="primary_light">#FFCDD2</color> <!-- 500 -->
+    <color name="accent">#FFFF00</color>
+
+
 </resources>

@@ -7,9 +7,32 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.android.sunchine.app.MainActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_logo"
+                android:scaleType="center"/>
+
+        </android.support.v7.widget.Toolbar>
 
 
-    <include layout="@layout/content_main" />
+
+        <include layout="@layout/content_main" />
+    </LinearLayout>
+
+
+
 
 
 

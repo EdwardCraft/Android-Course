@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.sunchine.app.gcm.RegistrationIntentService;
 import com.example.android.sunchine.app.sync.SunshineSyncAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity{
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private final String DETAILFRAGMENT_TAG  = "DFTAG";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    public final static String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
 
     private boolean mTwoPane;
     private String  mLocation;
@@ -37,6 +39,9 @@ public class MainActivity extends AppCompatActivity{
         mLocation = Utility.getPreferredLocation(this);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         if(findViewById(R.id.weather_detail_container) != null){
             //The detail container will be present only in the large-screen layouts
@@ -64,10 +69,22 @@ public class MainActivity extends AppCompatActivity{
         foreCastFragment.setUseTodayLayout(!mTwoPane);
         SunshineSyncAdapter.initializeSyncAdapter(this);
 
-        if(!checkPlayServices()){
-            // this is where we could either prompt a user that they  should install
-            // the latest version of google play services, or add and error Snackbar
-            // that some feature's wont be available
+        //if google  Play services is up to date, we'll want to register GCM. If it not, we'll
+        //skip the registration and this device will not receive any downstream  messages from
+        //our fake server. Because weather alert are not a core feature in this app, this should
+        // not affect the behavior of the app, from the user perspective
+        if(checkPlayServices()){
+            //Because this is the initial creation of the app, we'll want to be certain we have
+            //a token.If we to not,then we will, start the IntentService that will register this
+            //application with GCM.
+            SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(this);
+            boolean sentToken = sharedPreferences.getBoolean(SENT_TOKEN_TO_SERVER, false);
+            if(!sentToken){
+                Intent intent = new Intent(this, RegistrationIntentService.class);
+                startService(intent);
+            }
+
         }
 
 
