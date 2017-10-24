@@ -8,6 +8,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -57,6 +63,23 @@ public class MainActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            final List<String> fakeData = new ArrayList<>();
+            for(int i = 0; i < 10; i ++)
+                fakeData.add("fake data number: " + i);
+
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                    getActivity(),
+                    R.layout.list_item_forecast,
+                    R.id.list_item_forecast_textview,
+                    fakeData
+                    );
+
+            ListView listView = (ListView)rootView.findViewById(R.id.Listview_forecast);
+            if(listView != null){
+                listView.setAdapter(arrayAdapter);
+            }
+
+
             return rootView;
         }
     }
