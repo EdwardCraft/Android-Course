@@ -2,32 +2,32 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.2\classes.jar"
+        jar="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="d1bf02de1c56d942e7a9d093b8610ba1ef4128e3">
-        <dex dex="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\classes-aadaaa244f92ae27757ea0949032273feaf90abf.jar" />
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\classes-1f0ada92830cc3988ee412a83ccf826cb28957f0.jar" />
     </item>
     <item
-        jar="C:\Users\PEDRO\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.2\support-annotations-21.0.2.jar"
+        jar="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="99373741f99a0556ee293c41e8faa1ca3ae8a4e6">
-        <dex dex="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.2-730c8ebb6e531d262b8d6024fca7c7a8c0df6b49.jar" />
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\classes-63627f47e756c490061305de9934e92c549cbe38.jar" />
     </item>
     <item
-        jar="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.2\classes.jar"
+        jar="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="7ae2d38807a43b2f2185ff4089a92c790b579e54">
-        <dex dex="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\classes-68879a907609735919871dd96fb9c1496433780c.jar" />
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-c68699e10f04d09fe75cdaae1ef524e1d1614559.jar" />
     </item>
     <item
-        jar="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.2\libs\internal_impl-21.0.2.jar"
+        jar="C:\Users\PEDRO\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="962e8b12569c56dbdcf8367eb4eac8bb129cd18f">
-        <dex dex="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.2-ff9a4e71237da3a59417279f1f31818fdcd3afce.jar" />
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-ecfcceee1a42f9317bacf6b76b5a067f5fb284f0.jar" />
     </item>
 
 </items>

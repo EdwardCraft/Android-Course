@@ -1,5 +1,5 @@
 C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\classes\debug
-C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.2-730c8ebb6e531d262b8d6024fca7c7a8c0df6b49.jar
-C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.2-ff9a4e71237da3a59417279f1f31818fdcd3afce.jar
-C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\classes-68879a907609735919871dd96fb9c1496433780c.jar
-C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\classes-aadaaa244f92ae27757ea0949032273feaf90abf.jar
+C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-ecfcceee1a42f9317bacf6b76b5a067f5fb284f0.jar
+C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-c68699e10f04d09fe75cdaae1ef524e1d1614559.jar
+C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\classes-1f0ada92830cc3988ee412a83ccf826cb28957f0.jar
+C:\Users\PEDRO\Documents\Programing\Weather-App\app\build\intermediates\pre-dexed\debug\classes-63627f47e756c490061305de9934e92c549cbe38.jar

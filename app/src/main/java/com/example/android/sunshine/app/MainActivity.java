@@ -31,7 +31,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new ForecastFragment())
                     .commit();
         }
     }
@@ -55,113 +55,15 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
 
+
+
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            final List<String> fakeData = new ArrayList<>();
-            for(int i = 0; i < 10; i ++)
-                fakeData.add("fake data number: " + i);
-
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                    getActivity(),
-                    R.layout.list_item_forecast,
-                    R.id.list_item_forecast_textview,
-                    fakeData
-                    );
-
-            ListView listView = (ListView)rootView.findViewById(R.id.Listview_forecast);
-            if(listView != null){
-                listView.setAdapter(arrayAdapter);
-            }
-
-
-            return rootView;
-        }
-    }
-
-
-    private void getWeatherData(){
-
-
-        //These two need to  be declared outside the try/catch
-        //so that they can be closed in the finally block
-        HttpURLConnection urlConnection = null;
-        BufferedReader reader = null;
-
-        //Will contain the raw JSON response as a string
-        String forecastJsonStr = null;
-
-        try{
-
-            //Construct the url for the OpenWeatherMap query
-            // Possible parameters are available at OWM's forecast API page
-            URL url = new URL("open weather app");
-
-
-            //Create the request to OpenWeatherMap, and open the  connection
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
-
-            //Read the input stream into a String
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if(inputStream == null){
-                //Nothing to do.
-            }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-
-            while ((line = reader.readLine()) != null){
-                //Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                //But it does make debugging a *lot* easier if you print out the completed
-                //buffer for debugging.
-                buffer.append(line + "\n");
-            }
-
-            if(buffer.length() == 0){
-                //Stream was empty, No point in parsing.
-            }
-
-            forecastJsonStr = buffer.toString();
-
-        }catch (IOException e){
-            Log.e("PlaceholderFragment", "Error", e);
-            //if the code didn't  successfully get the weather data, there's no  point in
-            //attempting to parse it.
-
-            //return null;
-        }finally {
-            if(urlConnection != null){
-                urlConnection.disconnect();
-            }
-            if(reader != null){
-                try {
-                    reader.close();
-                }catch (final IOException e){
-                    Log.e("PlaceholderFragment", "Error closing stream", e);
-                }
-            }
-
-        }
 
 
 
 
-    }
 
 
 
